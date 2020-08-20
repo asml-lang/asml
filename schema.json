@@ -23,11 +23,21 @@
         "author": {
             "description": "The author of the model",
             "type": "string"
+        },
+        "properties": {
+            "type": "object"
+        },
+        "required": {
+            "type": "array"
+        },
+        "additionalProperties": {
+            "type": "boolean"
         }
     },
     "required": [
         "asml",
         "title",
-        "description"
-    ]
+        "properties"
+    ],
+    "additionalProperties": false
 }
