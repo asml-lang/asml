@@ -2,6 +2,7 @@
     "asml": "1.0.0",
     "title": "sending-email",
     "description": "A schema for run-time state migration of sending an email",
+    "author": "Saman Soltani (samansoltani.com)",
     "properties": {
         "from": {
             "description": "The sender email",
