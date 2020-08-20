@@ -1,2 +1,4 @@
-# asml
-Application State Modelling Language
+# ASML
+Application State Modeling Language
+
+A DSL for enabling run-time state migration

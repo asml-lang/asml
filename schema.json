@@ -1,1 +1,30 @@
-{}
+{
+    "$id": "https://saman.dev/asml/schema.json",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "title": "Application State Modeling Language",
+    "description": "A standard, programming language specification language for enabling run-time state migration between same-purpose applications of different vendors",
+    "type": "object",
+    "properties": {
+        "asml": {
+            "description": "ASML Specification semantic version number.",
+            "type": "string",
+            "pattern": "^([0-9]{1,}.[0-9]{1,}.[0-9]{1,})$",
+            "enum": [
+                "1.0.0"
+            ]
+        },
+        "title": {
+            "description": "The title for the Model.",
+            "type": "string"
+        },
+        "description": {
+            "description": "A short summary of the Model.",
+            "type": "string"
+        }
+    },
+    "required": [
+        "asml",
+        "title",
+        "description"
+    ]
+}
