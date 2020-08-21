@@ -23,6 +23,5 @@
         "from",
         "to",
         "body"
-    ],
-    "additionalProperties": false
+    ]
 }

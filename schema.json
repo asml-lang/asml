@@ -33,7 +33,7 @@
             "type": "array"
         },
         "additionalProperties": {
-            "type": "boolean"
+            "const": true
         }
     },
     "required": [
