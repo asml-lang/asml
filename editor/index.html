@@ -118,7 +118,7 @@
 	<script src="https://unpkg.com/monaco-editor@0.20.0/min/vs/loader.js"></script>
 	<script>
 		var BASE_URL = 'https://saman.dev/asml/';
-		var SCHEMA_URL = 'https://json-schema.org/draft/2019-09/schema/';
+		var SCHEMA_URL = 'https://json-schema.org/draft/2019-09/schema';
 		require.config({ paths: { vs: 'https://unpkg.com/monaco-editor@0.20.0/min/vs' } });
 		var ajv = new Ajv();
 
@@ -139,28 +139,17 @@
 			},
 			watch: {
 				asml: function () {
-					if (this.asml && this.asml.length) {
-						this.validateAsml();
-						if (this.asm && this.asm.length) {
-							this.validateAsm();
-							if (this.rts && this.rts.length) {
-								this.validateRts();
-							}
-						}
+					if (this.validateAsml() && this.validateAsm()) {
+						this.validateRts();
 					}
 				},
 				asm: function () {
-					if (this.asml && this.asml.length) {
-						this.validateAsm();
-						if (this.rts && this.rts.length) {
-							this.validateRts();
-						}
+					if (this.validateAsm()) {
+						this.validateRts();
 					}
 				},
 				rts: function () {
-					if (this.asm && this.asm.length) {
-						this.validateRts();
-					}
+					this.validateRts();
 				}
 			},
 			filters: {
@@ -172,15 +161,11 @@
 				}
 			},
 			methods: {
-				hasJsonStructure: function (str) {
-					if (typeof str !== 'string') return false;
+				safeJsonParse: function safeJsonParse(str) {
 					try {
-						const result = JSON.parse(str);
-						const type = Object.prototype.toString.call(result);
-						return type === '[object Object]'
-							|| type === '[object Array]';
-					} catch (err) {
-						return false;
+						return [[], JSON.parse(str)];
+					} catch (error) {
+						return [[{ message: error }]];
 					}
 				},
 				amdRequire: require,
@@ -193,6 +178,7 @@
 				// Load Application State Modeling Lanauage
 				loadAsml: function () {
 					this.$http.get(BASE_URL + 'schema.json').then(response => {
+						SCHEMA_URL = response.body["$schema"];
 						delete response.body["$id"];
 						delete response.body["$schema"];
 						this.asml = JSON.stringify(response.body, 0, 5);
@@ -212,34 +198,33 @@
 				},
 				// Validate Application State Modeling Lanauage
 				validateAsml: function () {
-					try {
-						ajv.validateSchema(JSON.parse(this.asml));
+					[this.asmlValidation, asmlJson] = this.safeJsonParse(this.asml);
+					if (asmlJson !== undefined) {
+						ajv.validateSchema(asmlJson);
 						this.asmlValidation = ajv.errors;
-					} catch (error) {
-						this.asmlValidation = [{ message: error }];
 					}
+					return !this.asmlValidation || this.asmlValidation.length === 0;
 				},
 				// Validate the Application State Model Example
 				validateAsm: function () {
-					if (this.hasJsonStructure(this.asml)) {
-						try {
-							ajv.validate(JSON.parse(this.asml), JSON.parse(this.asm));
-							this.asmValidation = ajv.errors;
-						} catch (error) {
-							this.asmValidation = [{ message: error }];
-						}
+					[this.asmlValidation, asmlJson] = this.safeJsonParse(this.asml);
+					[this.asmValidation, asmJson] = this.safeJsonParse(this.asm);
+					if (asmlJson !== undefined && asmJson !== undefined) {
+						ajv.validate(asmlJson, asmJson);
+						this.asmValidation = ajv.errors;
 					}
+					return !this.asmValidation || this.asmValidation.length === 0;
 				},
 				// Validate the Run-time State Example
 				validateRts: function () {
-					if (this.hasJsonStructure(this.asm)) {
-						try {
-							ajv.validate(JSON.parse(this.asm), JSON.parse(this.rts));
-							this.rtsValidation = ajv.errors;
-						} catch (error) {
-							this.rtsValidation = [{ message: error }];
-						}
+					[this.asmValidation, asmJson] = this.safeJsonParse(this.asm);
+					[this.rtsValidation, rtsJson] = this.safeJsonParse(this.rts);
+					if (asmJson !== undefined && rtsJson !== undefined) {
+						ajv.validate(asmJson, rtsJson);
+						this.rtsValidation = ajv.errors;
 					}
+
+					return !this.rtsValidation || this.rtsValidation.length === 0;
 				}
 			},
 			created: function () {
