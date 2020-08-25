@@ -1,0 +1,52 @@
+{
+    "asml": "1.0.0",
+    "title": "sending-email",
+    "description": "A schema model for run-time state migration of sending an email",
+    "author": "Saman Soltani (samansoltani.com)",
+    "examples": [
+        {
+            "from": "saman@mail.upb.de",
+            "to": "dennis.wolters@upb.de",
+            "body": "this is a text"
+        }
+    ],
+    "properties": {
+        "from": {
+            "$id": "#/properties/from",
+            "type": "string",
+            "format": "email",
+            "title": "The from schema",
+            "description": "The sender email",
+            "default": "",
+            "examples": [
+                "saman@mail.upb.de"
+            ]
+        },
+        "to": {
+            "$id": "#/properties/to",
+            "type": "string",
+            "format": "email",
+            "title": "The to schema",
+            "description": "The reciever email",
+            "default": "",
+            "examples": [
+                "dennis.wolters@upb.de"
+            ]
+        },
+        "body": {
+            "$id": "#/properties/body",
+            "type": "string",
+            "title": "The body text of the email",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "this is a text"
+            ]
+        }
+    },
+    "required": [
+        "from",
+        "to",
+        "body"
+    ]
+}
