@@ -115,15 +115,15 @@
                     "type": "number"
                 },
                 "exclusiveMaximum": {
-                    "type": "boolean",
-                    "default": false
+                    "type": "number",
+                    "default": 0
                 },
                 "minimum": {
                     "type": "number"
                 },
                 "exclusiveMinimum": {
-                    "type": "boolean",
-                    "default": false
+                    "type": "number",
+                    "default": 0
                 },
                 "maxLength": {
                     "type": "integer",
