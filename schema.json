@@ -2,44 +2,301 @@
     "$id": "https://saman.dev/asml/schema.json",
     "$schema": "https://json-schema.org/draft/2019-09/schema",
     "title": "Application State Modeling Language",
-    "description": "A standard, programming language specification language for enabling run-time state migration between same-purpose applications of different vendors",
+    "description": "A domain specific language for enabling run-time state migration between same-purpose applications of different vendors",
     "type": "object",
     "version": "1.0.0",
     "properties": {
         "asml": {
-            "description": "ASML Specification semantic version number.",
-            "type": "string",
-            "pattern": "^([0-9]{1,}.[0-9]{1,}.[0-9]{1,})$",
-            "enum": [
-                "1.0.0"
-            ]
+            "$ref": "#/definitions/asml"
         },
-        "title": {
-            "description": "The title for the Model.",
-            "type": "string"
-        },
-        "description": {
-            "description": "A short summary of the Model.",
-            "type": "string"
-        },
-        "author": {
-            "description": "The author of the model",
-            "type": "string"
+        "info": {
+            "$ref": "#/definitions/info"
         },
         "properties": {
-            "type": "object"
+            "additionalProperties": {
+                "oneOf": [
+                    {
+                        "$ref": "#/definitions/Schema"
+                    },
+                    {
+                        "$ref": "#/definitions/Reference"
+                    }
+                ]
+            }
         },
         "required": {
-            "type": "array"
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
         },
-        "additionalProperties": {
-            "const": true
+        "$schema": {
+            "type": "string"
         }
     },
     "required": [
         "asml",
-        "title",
+        "info",
         "properties"
     ],
-    "additionalProperties": false
+    "additionalProperties": false,
+    "definitions": {
+        "version": {
+            "type": "string",
+            "pattern": "^([0-9]{1,}.[0-9]{1,}.[0-9]{1,})$"
+        },
+        "asml": {
+            "description": "ASML Specification semantic version number.",
+            "$ref": "#/definitions/version"
+        },
+        "info": {
+            "type": "object",
+            "required": [
+                "title",
+                "version"
+            ],
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "contact": {
+                    "$ref": "#/definitions/contact"
+                },
+                "version": {
+                    "$ref": "#/definitions/version"
+                }
+            },
+            "additionalProperties": false
+        },
+        "contact": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email"
+                },
+                "url": {
+                    "type": "string",
+                    "format": "uri-reference"
+                }
+            },
+            "additionalProperties": false
+        },
+        "Reference": {
+            "type": "object",
+            "required": [
+                "$ref"
+            ],
+            "patternProperties": {
+                "^\\$ref$": {
+                    "type": "string",
+                    "format": "uri-reference"
+                }
+            }
+        },
+        "Schema": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "multipleOf": {
+                    "type": "number",
+                    "minimum": 0,
+                    "exclusiveMinimum": true
+                },
+                "maximum": {
+                    "type": "number"
+                },
+                "exclusiveMaximum": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "minimum": {
+                    "type": "number"
+                },
+                "exclusiveMinimum": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "maxLength": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "minLength": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": 0
+                },
+                "pattern": {
+                    "type": "string",
+                    "format": "regex"
+                },
+                "maxItems": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "minItems": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": 0
+                },
+                "uniqueItems": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "maxProperties": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "minProperties": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": 0
+                },
+                "required": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                },
+                "enum": {
+                    "type": "array",
+                    "items": {},
+                    "minItems": 1,
+                    "uniqueItems": false
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "array",
+                        "boolean",
+                        "integer",
+                        "number",
+                        "object",
+                        "string",
+                        "null"
+                    ]
+                },
+                "not": {
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/Schema"
+                        },
+                        {
+                            "$ref": "#/definitions/Reference"
+                        }
+                    ]
+                },
+                "allOf": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/definitions/Schema"
+                            },
+                            {
+                                "$ref": "#/definitions/Reference"
+                            }
+                        ]
+                    }
+                },
+                "oneOf": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/definitions/Schema"
+                            },
+                            {
+                                "$ref": "#/definitions/Reference"
+                            }
+                        ]
+                    }
+                },
+                "anyOf": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/definitions/Schema"
+                            },
+                            {
+                                "$ref": "#/definitions/Reference"
+                            }
+                        ]
+                    }
+                },
+                "items": {
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/Schema"
+                        },
+                        {
+                            "$ref": "#/definitions/Reference"
+                        }
+                    ]
+                },
+                "properties": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/definitions/Schema"
+                            },
+                            {
+                                "$ref": "#/definitions/Reference"
+                            }
+                        ]
+                    }
+                },
+                "additionalProperties": {
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/Schema"
+                        },
+                        {
+                            "$ref": "#/definitions/Reference"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ],
+                    "default": true
+                },
+                "description": {
+                    "type": "string"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "default": {},
+                "readOnly": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "writeOnly": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "example": {},
+                "deprecated": {
+                    "type": "boolean",
+                    "default": false
+                }
+            },
+            "patternProperties": {
+                "^x-": {}
+            },
+            "additionalProperties": false
+        }
+    }
 }
