@@ -58,7 +58,9 @@
 <body>
 	<div id="app">
 		<div class="editor">
-			<label for="">Application State Modeling Language</label>
+			<label for="">Application State Modeling Language
+				<button @click="loadAsml()">R</button>
+			</label>
 			<monaco-editor :options="options" :value="asml" v-model="asml" class="monaco-editor" language="json"
 				:amd-require="amdRequire"></monaco-editor>
 			<template v-if="asmlValidation && asmlValidation.length">
@@ -75,7 +77,9 @@
 			</template>
 		</div>
 		<div class="editor">
-			<label for="">Application State Model</label>
+			<label for="">Application State Model
+				<button @click="loadAsm()">R</button>
+			</label>
 			<monaco-editor :options="options" :value="asm" v-model="asm" class="monaco-editor" language="json"
 				:amd-require="amdRequire"></monaco-editor>
 			<template v-if="asmValidation && asmValidation.length">
@@ -92,7 +96,9 @@
 			</template>
 		</div>
 		<div class="editor">
-			<label for="">Run-time State</label>
+			<label for="">Run-time State
+				<button @click="loadRts()">R</button>
+			</label>
 			<monaco-editor :options="options" :value="rts" v-model="rts" class="monaco-editor" language="json"
 				:amd-require="amdRequire"></monaco-editor>
 			<template v-if="rtsValidation && rtsValidation.length">
@@ -196,6 +202,11 @@
 						this.rts = JSON.stringify(response.body, 0, 5)
 					});
 				},
+				loadAll: function () {
+					this.loadAsml();
+					this.loadAsm();
+					this.loadRts();
+				},
 				// Validate Application State Modeling Lanauage
 				validateAsml: function () {
 					[this.asmlValidation, asmlJson] = this.safeJsonParse(this.asml);
@@ -228,9 +239,7 @@
 				}
 			},
 			created: function () {
-				this.loadAsml();
-				this.loadAsm();
-				this.loadRts();
+				this.loadAll();
 			}
 
 		})
