@@ -183,7 +183,8 @@
                         "number",
                         "object",
                         "string",
-                        "null"
+                        "null",
+                        "any"
                     ]
                 },
                 "not": {
