@@ -1,4 +1,6 @@
 {
+    "$id": "https://saman.dev/asml/sending-email.asm.json",
+    "$schema": "https://saman.dev/asml/schema.json",
     "asml": "1.0.0",
     "info": {
         "title": "sending-email",
