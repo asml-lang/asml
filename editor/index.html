@@ -29,10 +29,14 @@
 			margin-top: 20px;
 		}
 
-		.editor label {
+		.editor-title {
 			display: inline-block;
 			margin-bottom: 10px;
 			width: 100%;
+		}
+
+		.editor-title label {
+			vertical-align: middle;
 		}
 
 		.monaco-editor {
@@ -52,15 +56,31 @@
 			background-color: gainsboro;
 			color: #333;
 		}
+
+		.reload {
+			padding: 10px;
+			float: right;
+		}
+
+		.reload-icon {
+			background: url('data:image/svg+xml,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sync-alt" class="svg-inline--fa fa-sync-alt fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M370.72 133.28C339.458 104.008 298.888 87.962 255.848 88c-77.458.068-144.328 53.178-162.791 126.85-1.344 5.363-6.122 9.15-11.651 9.15H24.103c-7.498 0-13.194-6.807-11.807-14.176C33.933 94.924 134.813 8 256 8c66.448 0 126.791 26.136 171.315 68.685L463.03 40.97C478.149 25.851 504 36.559 504 57.941V192c0 13.255-10.745 24-24 24H345.941c-21.382 0-32.09-25.851-16.971-40.971l41.75-41.749zM32 296h134.059c21.382 0 32.09 25.851 16.971 40.971l-41.75 41.75c31.262 29.273 71.835 45.319 114.876 45.28 77.418-.07 144.315-53.144 162.787-126.849 1.344-5.363 6.122-9.15 11.651-9.15h57.304c7.498 0 13.194 6.807 11.807 14.176C478.067 417.076 377.187 504 256 504c-66.448 0-126.791-26.136-171.315-68.685L48.97 471.03C33.851 486.149 8 475.441 8 454.059V320c0-13.255 10.745-24 24-24z"></path></svg>');
+			filter: invert(1);
+			width: 16px;
+			height: 16px;
+		}
 	</style>
 </head>
 
 <body>
 	<div id="app">
 		<div class="editor">
-			<label for="">Application State Modeling Language
-				<button @click="loadAsml()">R</button>
-			</label>
+			<div class="editor-title">
+				<label for="">Application State Modeling Language
+				</label>
+				<button class="reload" @click="loadAsml()">
+					<div class="reload-icon"></div>
+				</button>
+			</div>
 			<monaco-editor :options="options" :value="asml" v-model="asml" class="monaco-editor" language="json"
 				:amd-require="amdRequire"></monaco-editor>
 			<template v-if="asmlValidation && asmlValidation.length">
@@ -77,9 +97,14 @@
 			</template>
 		</div>
 		<div class="editor">
-			<label for="">Application State Model
-				<button @click="loadAsm()">R</button>
-			</label>
+			<div class="editor-title">
+				<label for="">Application State Model
+
+				</label>
+				<button class="reload" @click="loadAsm()">
+					<div class="reload-icon"></div>
+				</button>
+			</div>
 			<monaco-editor :options="options" :value="asm" v-model="asm" class="monaco-editor" language="json"
 				:amd-require="amdRequire"></monaco-editor>
 			<template v-if="asmValidation && asmValidation.length">
@@ -96,9 +121,14 @@
 			</template>
 		</div>
 		<div class="editor">
-			<label for="">Run-time State
-				<button @click="loadRts()">R</button>
-			</label>
+			<div class="editor-title">
+				<label for="">Run-time State
+
+				</label>
+				<button class="reload" @click="loadRts()">
+					<div class="reload-icon"></div>
+				</button>
+			</div>
 			<monaco-editor :options="options" :value="rts" v-model="rts" class="monaco-editor" language="json"
 				:amd-require="amdRequire"></monaco-editor>
 			<template v-if="rtsValidation && rtsValidation.length">
@@ -116,21 +146,23 @@
 		</div>
 	</div>
 
+	<script src="https://unpkg.com/uuid@latest/dist/umd/uuidv4.min.js"></script>
 	<script src="https://unpkg.com/vue@2.6.12/dist/vue.min.js"></script>
 	<script src="https://unpkg.com/vue-resource@1.5.1/dist/vue-resource.min.js"></script>
 	<script src="https://unpkg.com/vue-monaco@1.2.1/dist/vue-monaco.js"></script>
 	<script src="https://unpkg.com/ajv@6.12.4/dist/ajv.bundle.js"></script>
 	<script src="https://unpkg.com/ajv@6.12.4/dist/ajv.min.js"></script>
 	<script src="https://unpkg.com/monaco-editor@0.20.0/min/vs/loader.js"></script>
+
 	<script>
+		const ajv = new Ajv();
 		var BASE_URL = '../';
-		var SCHEMA_URL = 'http://json-schema.org/draft-07/schema';
+
 		require.config({
 			paths: {
 				vs: 'https://unpkg.com/monaco-editor@0.20.0/min/vs'
 			}
 		});
-		var ajv = new Ajv();
 
 		new Vue({
 			el: '#app',
@@ -148,6 +180,8 @@
 				asmValidation: [],
 				rts: '',
 				rtsValidation: [],
+				lastAsmlId: '',
+				lastAsmId: '',
 			},
 			watch: {
 				asml: function () {
@@ -190,15 +224,15 @@
 				},
 				amdRequire: require,
 				// Load JSON Schema
-				loadSchema: function () {
-					this.$http.get(SCHEMA_URL).then(response => {
-						this.schema = JSON.stringify(response.body, 0, 5);
+				loadSchema: function (url) {
+					this.$http.get(url).then(response => {
+						this.schema = response.body;
 					});
 				},
 				// Load Application State Modeling Lanauage
 				loadAsml: function () {
 					this.$http.get(BASE_URL + 'schema.json').then(response => {
-						SCHEMA_URL = response.body["$schema"];
+						this.loadSchema(response.body["$schema"]);
 						delete response.body["$id"];
 						delete response.body["$schema"];
 						this.asml = JSON.stringify(response.body, 0, 5);
@@ -208,7 +242,7 @@
 				loadAsm: function () {
 					this.$http.get(BASE_URL + 'sending-email.asm.json').then(response => {
 						// delete response.body["$id"];
-						// delete response.body["$schema"];
+						delete response.body["$schema"];
 						this.asm = JSON.stringify(response.body, 0, 5)
 					});
 				},
@@ -235,7 +269,8 @@
 				validateAsml: function () {
 					console.log('Validating Application State Modeling Language');
 					[this.asmlValidation, asmlJson] = this.safeJsonParse(this.asml);
-					if (asmlJson !== undefined) {
+					if (this.schema && asmlJson !== undefined) {
+						// ajv.addMetaSchema(this.schema);
 						ajv.validateSchema(asmlJson);
 						this.asmlValidation = ajv.errors;
 					}
@@ -248,7 +283,16 @@
 					[this.asmlValidation, asmlJson] = this.safeJsonParse(this.asml);
 					[this.asmValidation, asmJson] = this.safeJsonParse(this.asm);
 					if (asmlJson !== undefined && asmJson !== undefined) {
-						this.asmValidation = this.validate(asmlJson, asmJson);
+						this.lastAsmlId = 'http://saman.dev/asml/schema.json?' + uuidv4();
+						this.lastAsmId = 'http://saman.dev/asml/schema-model.json?' + uuidv4();
+						asmlJson["$id"] = this.lastAsmlId
+						asmJson["$id"] = this.lastAsmId;
+						asmJson["$schema"] = this.lastAsmlId;
+						console.log(asmJson);
+						ajv.addSchema([asmlJson, asmJson], undefined, true);
+						ajv.validateSchema(asmJson);
+						this.asmValidation = ajv.errors;
+						// this.asmValidation = this.validate(asmlJson, asmJson);
 					}
 					console.log('asmValidation', this.asmValidation)
 					return !this.asmValidation || this.asmValidation.length === 0;
@@ -259,7 +303,10 @@
 					[this.asmValidation, asmJson] = this.safeJsonParse(this.asm);
 					[this.rtsValidation, rtsJson] = this.safeJsonParse(this.rts);
 					if (asmJson !== undefined && rtsJson !== undefined) {
-						this.rtsValidation = this.validate(asmJson, rtsJson);
+						asmJson["$id"] = this.lastAsmId;
+						asmJson["$schema"] = this.lastAsmlId;
+						ajv.validate(asmJson, rtsJson);
+						this.rtsValidation = ajv.errors;
 					}
 					console.log('rtsValidation', this.rtsValidation)
 					return !this.rtsValidation || this.rtsValidation.length === 0;
