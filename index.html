@@ -17,9 +17,18 @@
     <h1>Application State Modeling Language</h1>
     <h2>A DSL for enabling run-time state migration</h2>
 
-    <p>
-        You can see the <a href="./editor/">live demo</a>.
-    </p>
+    <p>Loading...</p>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+    <script>
+        var converter = new showdown.Converter();
+        fetch('./README.md')
+            .then(response => response.text())
+            .then(md => {
+                var html = converter.makeHtml(md);
+                console.log(html);
+                document.querySelector('body').innerHTML = html;
+            });
+    </script>
 </body>
 
 </html>
