@@ -14,14 +14,7 @@
         },
         "properties": {
             "additionalProperties": {
-                "oneOf": [
-                    {
-                        "$ref": "#/definitions/Schema"
-                    },
-                    {
-                        "$ref": "#/definitions/Reference"
-                    }
-                ]
+                "$ref": "#/definitions/Schema"
             }
         },
         "required": {
@@ -90,18 +83,6 @@
                 }
             },
             "additionalProperties": false
-        },
-        "Reference": {
-            "type": "object",
-            "required": [
-                "$ref"
-            ],
-            "patternProperties": {
-                "^\\$ref$": {
-                    "type": "string",
-                    "format": "uri-reference"
-                }
-            }
         },
         "Schema": {
             "type": "object",
@@ -191,84 +172,39 @@
                     ]
                 },
                 "not": {
-                    "oneOf": [
-                        {
-                            "$ref": "#/definitions/Schema"
-                        },
-                        {
-                            "$ref": "#/definitions/Reference"
-                        }
-                    ]
+                    "$ref": "#/definitions/Schema"
                 },
                 "allOf": {
                     "type": "array",
                     "items": {
-                        "oneOf": [
-                            {
-                                "$ref": "#/definitions/Schema"
-                            },
-                            {
-                                "$ref": "#/definitions/Reference"
-                            }
-                        ]
+                        "$ref": "#/definitions/Schema"
                     }
                 },
                 "oneOf": {
                     "type": "array",
                     "items": {
-                        "oneOf": [
-                            {
-                                "$ref": "#/definitions/Schema"
-                            },
-                            {
-                                "$ref": "#/definitions/Reference"
-                            }
-                        ]
+                        "$ref": "#/definitions/Schema"
                     }
                 },
                 "anyOf": {
                     "type": "array",
                     "items": {
-                        "oneOf": [
-                            {
-                                "$ref": "#/definitions/Schema"
-                            },
-                            {
-                                "$ref": "#/definitions/Reference"
-                            }
-                        ]
+                        "$ref": "#/definitions/Schema"
                     }
                 },
                 "items": {
-                    "oneOf": [
-                        {
-                            "$ref": "#/definitions/Schema"
-                        },
-                        {
-                            "$ref": "#/definitions/Reference"
-                        }
-                    ]
+                    "$ref": "#/definitions/Schema"
                 },
                 "properties": {
                     "type": "object",
                     "additionalProperties": {
-                        "oneOf": [
-                            {
-                                "$ref": "#/definitions/Schema"
-                            },
-                            {
-                                "$ref": "#/definitions/Reference"
-                            }
-                        ]
+                        "$ref": "#/definitions/Schema"
                     }
                 },
                 "additionalProperties": {
                     "oneOf": [
                         {
                             "$ref": "#/definitions/Schema"
-                        },
-                        {
-                            "$ref": "#/definitions/Reference"
                         },
                         {
                             "type": "boolean"
@@ -296,9 +232,6 @@
                     "type": "boolean",
                     "default": false
                 }
-            },
-            "patternProperties": {
-                "^x-": {}
             },
             "additionalProperties": false
         }
