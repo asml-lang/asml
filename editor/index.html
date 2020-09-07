@@ -267,7 +267,7 @@
 				},
 				// Validate Application State Modeling Lanauage
 				validateAsml: function () {
-					console.log('Validating Application State Modeling Language');
+					console.info('Validating Application State Modeling Language');
 					[this.asmlValidation, asmlJson] = this.safeJsonParse(this.asml);
 					if (this.schema && asmlJson !== undefined) {
 						// ajv.addMetaSchema(this.schema);
@@ -279,7 +279,7 @@
 				},
 				// Validate the Application State Model Example
 				validateAsm: function () {
-					console.log('Validating Application State Model');
+					console.info('Validating Application State Model');
 					[this.asmlValidation, asmlJson] = this.safeJsonParse(this.asml);
 					[this.asmValidation, asmJson] = this.safeJsonParse(this.asm);
 					if (asmlJson !== undefined && asmJson !== undefined) {
@@ -299,7 +299,7 @@
 				},
 				// Validate the Run-time State Example
 				validateRts: function () {
-					console.log('Validating Run-time State');
+					console.info('Validating Run-time State');
 					[this.asmValidation, asmJson] = this.safeJsonParse(this.asm);
 					[this.rtsValidation, rtsJson] = this.safeJsonParse(this.rts);
 					if (asmJson !== undefined && rtsJson !== undefined) {
