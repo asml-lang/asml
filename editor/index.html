@@ -231,7 +231,7 @@
 				},
 				// Load Application State Modeling Lanauage
 				loadAsml: function () {
-					this.$http.get(BASE_URL + 'schema.json').then(response => {
+					this.$http.get(BASE_URL + 'schemas/schema.json').then(response => {
 						this.loadSchema(response.body["$schema"]);
 						delete response.body["$id"];
 						delete response.body["$schema"];
@@ -240,7 +240,7 @@
 				},
 				// Load an Application State Model Example
 				loadAsm: function () {
-					this.$http.get(BASE_URL + 'sending-email.asm.json').then(response => {
+					this.$http.get(BASE_URL + 'examples/sending-email.asm.json').then(response => {
 						// delete response.body["$id"];
 						delete response.body["$schema"];
 						this.asm = JSON.stringify(response.body, 0, 5)
@@ -248,7 +248,7 @@
 				},
 				// Load a Run-time State Example
 				loadRts: function () {
-					this.$http.get(BASE_URL + 'example.json').then(response => {
+					this.$http.get(BASE_URL + 'examples/sending-email.json').then(response => {
 						this.rts = JSON.stringify(response.body, 0, 5)
 					});
 				},
@@ -283,8 +283,8 @@
 					[this.asmlValidation, asmlJson] = this.safeJsonParse(this.asml);
 					[this.asmValidation, asmJson] = this.safeJsonParse(this.asm);
 					if (asmlJson !== undefined && asmJson !== undefined) {
-						this.lastAsmlId = 'http://saman.dev/asml/schema.json?' + uuidv4();
-						this.lastAsmId = 'http://saman.dev/asml/schema-model.json?' + uuidv4();
+						this.lastAsmlId = 'http://saman.dev/asml/schemas/schema.json?' + uuidv4();
+						this.lastAsmId = 'http://saman.dev/asml/schemas/schema-model.json?' + uuidv4();
 						asmlJson["$id"] = this.lastAsmlId
 						asmJson["$id"] = this.lastAsmId;
 						asmJson["$schema"] = this.lastAsmlId;
