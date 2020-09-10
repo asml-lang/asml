@@ -1,0 +1,22 @@
+{
+  "name": "asml",
+  "version": "1.0.0",
+  "description": "A DSL for enabling run-time state migration",
+  "main": "schemas/schema.json",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saman/asml.git"
+  },
+  "author": "Saman Soltani <samansoltani.com>",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/saman/asml/issues"
+  },
+  "homepage": "https://github.com/saman/asml#readme"
+}
