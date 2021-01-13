@@ -3,7 +3,7 @@ A DSL for enabling run-time state migration
 
 
 ## Demo
-You can see the [live demo](https://asml-lang.github.io/asml/).
+You can see the [live demo](https://asml-lang.github.io/asml/editor).
 
 
 ## Source code
