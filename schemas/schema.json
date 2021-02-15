@@ -1,5 +1,5 @@
 {
-    "$id": "https://saman.dev/asml/schemas/schema.json",
+    "$id": "https://asml-lang.github.io/asml/schemas/schema.json",
     "$schema": "https://json-schema.org/draft-07/schema",
     "title": "Application State Modeling Language",
     "description": "A domain specific language for enabling run-time state migration between same-purpose applications of different vendors",
