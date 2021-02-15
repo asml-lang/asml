@@ -1,6 +1,4 @@
 {
-    "$id": "https://saman.dev/asml/sending-email.asm.json",
-    "$schema": "https://saman.dev/asml/schema.json",
     "asml": "1.0.0",
     "info": {
         "title": "sending-email",
@@ -20,17 +18,19 @@
         },
         "to": {
             "description": "The reciever email",
-            "type": "string",
-            "format": "email"
+            "type": "array",
+            "items": {
+                "type": "string",
+                "format": "email"
+            }
+        },
+        "subject": {
+            "description": "The subject text of the email",
+            "type": "string"
         },
         "body": {
             "description": "The body text of the email",
             "type": "string"
         }
-    },
-    "required": [
-        "from",
-        "to",
-        "body"
-    ]
+    }
 }
