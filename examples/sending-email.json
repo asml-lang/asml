@@ -1,5 +1,5 @@
 {
-    "from": "saman@mail.upb.de",
-    "to": "dennis.wolters@upb.de",
+    "from": "from@mail.upb.de",
+    "to": ["to-first@upb.de", "to-second@upb.de"]
     "body": "this is a text"
 }
