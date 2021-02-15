@@ -167,8 +167,7 @@
                         "number",
                         "object",
                         "string",
-                        "null",
-                        "any"
+                        "null"
                     ]
                 },
                 "not": {
