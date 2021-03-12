@@ -63,6 +63,12 @@
                 },
                 "version": {
                     "$ref": "#/definitions/version"
+                },
+                "keywords": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             },
             "additionalProperties": false
